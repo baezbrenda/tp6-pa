@@ -1,0 +1,13 @@
+{
+  "name": "activation-poc",
+  "private": true,
+  "scripts": {
+    "build:libs": "pnpm --filter @poc/contracts build",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^20.14.0"
+  }
+}
