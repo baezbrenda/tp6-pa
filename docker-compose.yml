@@ -60,3 +60,79 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
+
+  activation-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "dist/apps/activation-api/main.js"]
+    ports:
+      - "3000:3000"
+    environment:
+      - KAFKA_BROKERS=kafka:19092
+      - MONGO_URI=mongodb://mongo:27017/activation
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+  billing-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "dist/apps/billing-service/main.js"]
+    environment:
+      - KAFKA_BROKERS=kafka:19092
+      - MONGO_URI=mongodb://mongo:27017/billing
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+  provisioning-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "dist/apps/provisioning-service/main.js"]
+    environment:
+      - KAFKA_BROKERS=kafka:19092
+      - MONGO_URI=mongodb://mongo:27017/provisioning
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "dist/apps/notification-service/main.js"]
+    environment:
+      - KAFKA_BROKERS=kafka:19092
+      - MONGO_URI=mongodb://mongo:27017/notification
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+
+  crm-analytics-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "dist/apps/crm-analytics-service/main.js"]
+    environment:
+      - KAFKA_BROKERS=kafka:19092
+      - MONGO_URI=mongodb://mongo:27017/crm
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy

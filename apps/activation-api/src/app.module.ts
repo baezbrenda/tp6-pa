@@ -4,6 +4,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { Activation, ActivationSchema } from './activations/activation.schema';
 import { ActivationsController } from './activations/activations.controller';
 import { ActivationsService } from './activations/activations.service';
+import { AggregatorController } from './activations/aggregator.controller';
+import { AggregatorService } from './activations/aggregator.service';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { ActivationsService } from './activations/activations.service';
       },
     ]),
   ],
-  controllers: [ActivationsController],
-  providers: [ActivationsService],
+  controllers: [ActivationsController, AggregatorController],
+  providers: [ActivationsService, AggregatorService],
 })
 export class AppModule {}
